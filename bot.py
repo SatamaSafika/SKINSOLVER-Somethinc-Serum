@@ -1,10 +1,25 @@
 import os
-from dotenv import load_dotenv
-import discord
 import re
 import random
+import discord
+from dotenv import load_dotenv
 
+# ================================
+# NOTES
+# ================================
+# - This bot uses `user_states` (in-memory dict) per user.
+#   * All state is lost when the bot process is restarted (run ulang).
+#   * After the bot gives a final recommendation, the user's state is reset.
+#   * If user input doesn't match expected regex at any step, a default fallback message is returned.
+#
+# - Greeting is handled in on_message to avoid "double responses" / race conditions:
+#   when user says "hai", the bot immediately replies greeting and returns (no other handlers run).
+#
+# - Put your DISCORD_TOKEN into a .env file or environment variable named DISCORD_TOKEN.
+
+# ================================
 # Load Token
+# ================================
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
@@ -15,27 +30,49 @@ client = discord.Client(intents=intents)
 # ================================
 # State management per user
 # ================================
-user_states = {}  
-# Format state: { user_id: {"phase": "bright", "step": "focus"} }
+user_states = {}
+# Format: { user_id: {"goal": "bright", "focus": "kusam", "step": "goal"} }
+
+def reset_user(user_id):
+    """Remove stored state for a user (called after final recommendation or when greeting)."""
+    if user_id in user_states:
+        del user_states[user_id]
+
+def set_state(user_id, **kwargs):
+    if user_id not in user_states:
+        user_states[user_id] = {}
+    user_states[user_id].update(kwargs)
+
+def get_state(user_id, key, default=None):
+    return user_states.get(user_id, {}).get(key, default)
+
+def handle_greeting(user_id):
+    """Fungsi untuk test greeting tanpa harus pakai Discord event."""
+    reset_user(user_id)
+    set_state(user_id, step="goal")
+    return greet_user()
+
 
 # ================================
-# Regex patterns
+# Regex patterns (flexible, bilingual)
 # ================================
+greet_pattern = r"\b(hi|hello|hey|hai|halo)\b"
 
-phase_patterns = {
-    "greet": [r"\b(hi|hello|hey|halo|hai|morning|afternoon|evening)\b"],
-    "bright": [r"\b(cerah|mencerahkan|bright|glow)\b"],
+goal_patterns = {
+    "bright": [r"\b(cerah|mencerahkan|bright|glow|glowing)\b"],
     "acne": [r"\b(acne|jerawat|pimple|bruntusan|komedo|breakout|pori)\b"],
-    "antiaging": [r"\b(antiaging|keriput|wrinkle|tua|aging|garis halus|awet muda|kerutan|umur)\b"],
+    "antiaging": [r"\b(anti[- ]?aging|antiaging|keriput|wrinkle|tua|aging|garis halus|awet muda|kerutan|umur)\b"],
 }
 
 focus_patterns = {
+    # bright branch
     "kusam": r"\b(kusam|dull|pucat|gelap)\b",
-    "bekas": r"\b(bekas|scar|mark)\b",
-    "hyper": r"\b(hyper|flek|dark spot|hiperpigmentasi)\b",
+    "bekas": r"\b(bekas|scar|mark|bekas jerawat|noda)\b",
+    "hyper": r"\b(hyper|flek|dark spot|hiperpigmentasi|hiperpigmentasi)\b",
+    # acne branch
     "jerawat": r"\b(jerawat|acne|pimple|bruntusan|komedo|breakout)\b",
     "cegah": r"\b(cegah|prevent|pencegahan)\b",
-    "visible": r"\b(visible|nampak|kelihatan)\b",
+    "visible": r"\b(visible|nampak|kelihatan|meradang|parah)\b",
 }
 
 type_patterns = {
@@ -45,59 +82,73 @@ type_patterns = {
 }
 
 # ================================
-# Responses
+# Greeting
 # ================================
+def greet_user():
+    return (
+        "Hai cantik, selamat datang di **SKINSOLVER** 💎\n"
+        "Aku hadir khusus buat nemenin kamu nemuin solusi pas untuk kulitmu — "
+        "mulai dari mencerahkan, mengatasi jerawat, sampai anti-aging ✨.\n\n"
+        "Coba ceritakan dulu yuk... goal utama kulitmu apa? 🌸"
+    )
 
+# ================================
+# Responses (interactive style)
+# ================================
 responses = {
-    "greet": {
-        "default": [
-            "Hai cantik! ✨ Apa kabar hari ini?",
-            "Halo! Senang ketemu kamu 🤗",
-        ],
-        "next": "Kamu mau serum untuk apa nih? Percayakan samaku, aku pasti bisa beri kamu jawabannya",
-    },
     "bright": {
-        "ask_focus": "Mau fokus mencerahkan bagian wajah yang mana nih, beauty? ",
+        "ask_focus": "Baik, goal kamu mencerahkan kulit ✨. Lebih fokus ke **kusam, bekas jerawat, atau hiperpigmentasi**?",
+        "focus_default": "Oke, jadi kamu ingin kulit lebih cerah 🌸. Supaya lebih spesifik, apakah lebih ke **kusam, bekas jerawat, atau hiperpigmentasi**?",
         "kusam": {
-            "ask_type": "Oke, kulit kusam ya. Tapi sebelum itu aku mau tanya lagi dong, tipe kulit kamu apa? ",
-            "sensitive": ["Gunakan *5% Niacinamide + Moisture Sabi Beet Serum* jika kulit kamu normal-to-dry atau *Revive Potion 3% Arbutin Bakuchiol* jika kulit kamu normal-to-oily 🌸"],
-            "normal": ["Kulit normal bisa pakai *10% Niacinamide + Moisture Sabi Beet Serum* ya cantik 🌟"],
-            "oily": ["Coba produk *Revive Potion 3% Arbutin Bakuchiol* kami, beauty 😉"],
+            "ask_type": "Kulit kusam ya ✨. Biar aku bisa kasih rekomendasi tepat, tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
+            "sensitive": ["Untuk kulit sensitif yang kusam, coba *5% Niacinamide + Moisture Sabi Beet Serum* 🌿"],
+            "normal": ["Kulit normal kusam cocok dengan *10% Niacinamide + Moisture Sabi Beet Serum* 🌟"],
+            "oily": ["Kalau kusam + berminyak, coba *Revive Potion 3% Arbutin Bakuchiol* 💧"],
+            "type_default": "Aku paham, tipe kulitmu unik ya 💕. Tapi kalau digeneralisasi, apakah lebih dekat ke **sensitive, normal, atau oily**?"
         },
         "bekas": [
-            "Untuk bekas jerawat, gunakan Dark Spot Reducer Ampoule kami ya beb 🌿",
-            "Kamu bisa cobain Ampoule kami yang namanya Dark Spot Reducer ya cantik  🌞",
+            "Untuk bekas jerawat, *Dark Spot Reducer Ampoule* bisa jadi andalan 🌿",
+            "Coba juga *Dark Spot Reducer Ampoule*, diformulasikan khusus untuk bantu samarkan bekas jerawat 🌞",
         ],
         "hyper": {
-            "ask_type": "Oke, kamu mau mengatasi hiperpigmentasi ya. Sebelum itu, tipe kulit kamu apa?",
-            "sensitive": ["Pakai serum anti-spot yang diformulasikan untuk kulit sensitif 🌸"],
-            "normal": ["Gunakan retinol atau AHA untuk mengurangi hiperpigmentasi 🌟"],
-            "oily": ["Kulit berminyak cocok dengan azelaic acid atau niacinamide 💧"],
+            "ask_type": "Mengatasi hiperpigmentasi memang butuh perhatian ekstra 🌸. Tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
+            "sensitive": ["Kulit sensitif dengan flek cocok dengan serum anti-spot ringan 🌿"],
+            "normal": ["Untuk kulit normal, retinol atau AHA bisa bantu kurangi flek 🌟"],
+            "oily": ["Kalau kulitmu oily + flek, coba azelaic acid atau niacinamide 💧"],
+            "type_default": "Oke cantik, biar lebih tepat aku perlu tahu dulu... kulitmu lebih condong ke **sensitive, normal, atau oily**?"
         },
     },
     "acne": {
-        "ask_focus": "Acne itu terkadang disebabkan masalah pori, tetapi acne dan pori-pori itu kadang berbeda cara perawatannya. Kamu mau mulai dari yang mana dulu?",
-        "jerawat": ["Gunakan salicylic acid atau benzoyl peroxide untuk jerawat aktif 🧴"],
-        "cegah": ["Rajin double cleansing dan pakai sunscreen bisa mencegah jerawat 🌞"],
-        "visible": ["Produk spot treatment bisa membantu jerawat yang terlihat 👀"],
+        "ask_focus": "Oke, goal kamu mengatasi jerawat 🧴. Mau fokus ke **jerawat aktif, pencegahan, atau jerawat yang terlihat jelas**?",
+        "focus_default": "Aku mengerti, tapi biar lebih spesifik 🌸. Apakah mau fokus ke **jerawat aktif, pencegahan, atau jerawat yang terlihat**?",
+        "jerawat": ["Untuk jerawat aktif, coba *salicylic acid* atau *benzoyl peroxide* 🧴"],
+        "cegah": ["Untuk pencegahan jerawat, double cleansing + sunscreen adalah kunci 🌞"],
+        "visible": ["Kalau jerawat yang terlihat, spot treatment bisa jadi sahabatmu 👀"],
     },
     "antiaging": {
-        "ask_type": "Cantik itu tidak lekang oleh waktu, beauty. Tapi untuk menjaga kulit tetap muda dan sehat, aku ignin tau nih tipe kulitmu apa",
-        "sensitive": ["Gunakan retinol low concentration atau bakuchiol 🌿"],
-        "normal": ["Kulit normal bisa mencoba retinol + moisturizer yang kaya nutrisi 💧"],
-        "oily": ["Produk ringan dengan retinol/peptide cocok untuk kulit berminyak ✨"],
+        "ask_type": "Anti-aging itu investasi jangka panjang untuk kulitmu 💎. Tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
+        "sensitive": ["Untuk kulit sensitif, mulai dengan retinol low concentration atau bakuchiol 🌿"],
+        "normal": ["Kulit normal bisa gunakan retinol + moisturizer bernutrisi 💧"],
+        "oily": ["Kalau kulitmu oily, pilih formula ringan dengan retinol/peptide ✨"],
+        "type_default": "Oke sayang, aku ingin lebih pasti dulu. Tipe kulitmu lebih dekat ke **sensitive, normal, atau oily**?"
     },
 }
 
-# ================================
-# Detection functions
-# ================================
+# Default fallback messages (randomized)
+default_fallbacks = [
+    "Maaf, aku belum nangkep maksudnya 😊. Kamu bisa ulangi dengan kata lain?",
+    "Aku agak bingung nih ✨. Coba jelasin lagi, misalnya: 'mencerahkan' / 'jerawat' / 'anti-aging'.",
+    "Coba pilih salah satu: **mencerahkan**, **jerawat**, atau **anti-aging** ✨"
+]
 
-def detect_phase(message: str):
-    for phase, patterns in phase_patterns.items():
-        for pat in patterns:
+# ================================
+# Detection helpers
+# ================================
+def detect_goal(message: str):
+    for goal, pats in goal_patterns.items():
+        for pat in pats:
             if re.search(pat, message, re.IGNORECASE):
-                return phase
+                return goal
     return None
 
 def detect_focus(message: str):
@@ -113,100 +164,142 @@ def detect_type(message: str):
     return None
 
 # ================================
-# Conversation handler
+# Conversation flow (no greeting handling here)
 # ================================
 def get_response(user_id, message: str):
+    """
+    Core state-driven response generator.
+    Greeting is handled in on_message to avoid double-responses.
+    """
     state = user_states.get(user_id, {})
+    step = state.get("step")
 
-    # STEP 1: Greet
-    if not state:
-        phase = detect_phase(message)
-        if phase == "greet":
-            user_states[user_id] = {"step": "phase"}
-            return random.choice(responses["greet"]["default"]) + "\n" + responses["greet"]["next"]
-        return None
-
-    # STEP 2: Detect Phase after greeting
-    if state.get("step") == "phase":
-        phase = detect_phase(message)
-        if phase in ["bright", "acne", "antiaging"]:
-            user_states[user_id] = {"phase": phase, "step": "focus"}
-            if phase == "bright":
+    # --- STEP 1: Goal ---
+    if step in [None, "goal"]:
+        # If user_state absent, we still allow direct goal input (user typed "bright" without greeting)
+        goal = detect_goal(message)
+        if goal:
+            if goal == "bright":
+                set_state(user_id, goal=goal, step="focus")
                 return responses["bright"]["ask_focus"]
-            elif phase == "acne":
+            if goal == "acne":
+                set_state(user_id, goal=goal, step="focus")
                 return responses["acne"]["ask_focus"]
-            elif phase == "antiaging":
+            if goal == "antiaging":
+                set_state(user_id, goal=goal, step="type")
                 return responses["antiaging"]["ask_type"]
-        return "Coba ceritakan, kamu ingin skincare untuk mencerahkan, jerawat, atau anti aging? 😊"
+        # didn't detect goal
+        if step == "goal":
+            # user was expected to answer goal but didn't
+            return "Aku ingin lebih jelas dulu ✨. Goal kamu lebih ke **mencerahkan, jerawat, atau anti-aging**?"
+        # No state & no goal: ask to greet or give goal (default fallback)
+        return random.choice(default_fallbacks)
 
-    # STEP 3: Focus / Type
-    phase = state.get("phase")
-    if state.get("step") == "focus":
-        if phase == "bright":
-            focus = detect_focus(message)
+    # --- STEP 2: Focus ---
+    if step == "focus":
+        goal = state.get("goal")
+        focus = detect_focus(message)
+
+        if not focus:
+            # fallback prompts specific to goal
+            if goal == "bright":
+                return responses["bright"]["focus_default"]
+            if goal == "acne":
+                return responses["acne"]["focus_default"]
+            return random.choice(default_fallbacks)
+
+        # handle bright focus
+        if goal == "bright":
             if focus == "kusam":
-                user_states[user_id] = {"phase": phase, "focus": "kusam", "step": "type"}
-
+                set_state(user_id, goal=goal, focus="kusam", step="type")
                 return responses["bright"]["kusam"]["ask_type"]
-            
             elif focus == "bekas":
-                user_states[user_id] = {}
-                return random.choice(responses["bright"]["bekas"])
+                # final recommendation -> reset
+                reply = random.choice(responses["bright"]["bekas"])
+                reset_user(user_id)
+                return reply
             elif focus == "hyper":
-                user_states[user_id] = {"phase": phase, "focus": "hyper", "step": "type"}
+                set_state(user_id, goal=goal, focus="hyper", step="type")
                 return responses["bright"]["hyper"]["ask_type"]
-
-        elif phase == "acne":
-            focus = detect_focus(message)
-            if focus in responses["acne"]:
-                user_states[user_id] = {}
-                return random.choice(responses["acne"][focus])
-
-        elif phase == "antiaging":
-            t = detect_type(message)
-            if t and t in responses["antiaging"]:
-                user_states[user_id] = {}
-                return random.choice(responses["antiaging"][t])
             else:
-                user_states[user_id] = {"phase": phase, "step": "type"}
-                return responses["antiaging"]["ask_type"]
+                return responses["bright"]["focus_default"]
 
-    if state.get("step") == "type":
-        phase = state.get("phase")
-        focus = state.get("focus")
+        # handle acne focus: all acne focus lead to immediate recommendation
+        if goal == "acne":
+            # if detected one of jerawat/cegah/visible
+            if focus in ["jerawat", "cegah", "visible"]:
+                reply_list = responses["acne"].get(focus)
+                reply = random.choice(reply_list) if reply_list else responses["acne"]["focus_default"]
+                reset_user(user_id)
+                return reply
+            else:
+                return responses["acne"]["focus_default"]
+
+    # --- STEP 3: Type ---
+    if step == "type":
+        goal = state.get("goal")
+        focus = state.get("focus")  # may be None for antiaging
         t = detect_type(message)
+
         if not t:
-            return "Tipe kulit kamu sensitive, normal, atau oily ya? 😊"
+            # type missing; prompt accordingly
+            if goal == "bright" and focus in ["kusam", "hyper"]:
+                return responses["bright"][focus]["type_default"]
+            if goal == "antiaging":
+                return responses["antiaging"]["type_default"]
+            return "Oke, aku ingin tahu lebih jelas 🌸. Kulitmu lebih condong ke **sensitive, normal, atau oily**?"
 
-        # Bright - kusam/hyper
-        if phase == "bright" and focus in ["kusam", "hyper"]:
-            if t in responses["bright"][focus]:
-                user_states[user_id] = {}
-                return random.choice(responses["bright"][focus][t])
+        # if we got a type
+        if goal == "bright" and focus in ["kusam", "hyper"]:
+            # pick a recommendation based on type
+            reply_list = responses["bright"][focus].get(t)
+            reply = random.choice(reply_list) if reply_list else responses["bright"][focus]["type_default"]
+            reset_user(user_id)
+            return reply
 
-        # Antiaging
-        if phase == "antiaging":
-            if t in responses["antiaging"]:
-                user_states[user_id] = {}
-                return random.choice(responses["antiaging"][t])
+        if goal == "antiaging":
+            reply_list = responses["antiaging"].get(t)
+            reply = random.choice(reply_list) if reply_list else responses["antiaging"]["type_default"]
+            reset_user(user_id)
+            return reply
 
-    return None
+    # Fallback (should not usually reach here)
+    return random.choice(default_fallbacks)
 
 # ================================
-# Discord Events
+# Discord event handlers
 # ================================
-
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
 
 @client.event
 async def on_message(message):
+    # ignore bot's own messages
     if message.author == client.user:
         return
-    
-    response = get_response(message.author.id, message.content)
+
+    text = message.content.strip()
+
+    # 1) Greeting handler at top-level: reset and greet (stop further processing)
+    if re.search(greet_pattern, text, re.IGNORECASE):
+        # clear any previous state for a clean start
+        reset_user(message.author.id)
+        # set to waiting for goal (so next user message is treated as goal answer)
+        set_state(message.author.id, step="goal")
+        await message.channel.send(greet_user())
+        return  # important: do not continue to get_response for this message
+
+    # 2) Normal flow
+    response = get_response(message.author.id, text)
     if response:
         await message.channel.send(response)
 
-client.run(TOKEN)
+# ================================
+# Run bot (hanya kalau main)
+# ================================
+if __name__ == "__main__":
+    if not TOKEN:
+        print("ERROR: DISCORD_TOKEN not found. Put it in your environment or .env file.")
+    else:
+        client.run(TOKEN)
