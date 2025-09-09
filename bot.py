@@ -3,6 +3,7 @@ import re
 import random
 import discord
 from dotenv import load_dotenv
+import logging
 
 # ================================
 # NOTES
@@ -16,6 +17,14 @@ from dotenv import load_dotenv
 #   when user says "hai", the bot immediately replies greeting and returns (no other handlers run).
 #
 # - Put your DISCORD_TOKEN into a .env file or environment variable named DISCORD_TOKEN.
+
+
+# Logging
+logging.basicConfig(
+    filename="logs/bot.log",
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+)
 
 # ================================
 # Load Token
