@@ -4,6 +4,8 @@
 
 **SKINSOLVER** adalah chatbot Discord berbasis **Python** yang dibangun dengan pendekatan **rule-based (regex)** dan mekanisme *reflection* kata ganti. Bot ini membantu pengguna menemukan **serum Somethinc** sesuai tipe kulit dan fokus perawatan — seperti *kulit kusam*, *jerawat*, hingga *anti-aging*. Dengan sistem interaktif, pengguna cukup menjawab beberapa pertanyaan, lalu bot akan menyarankan produk yang relevan. Tujuan utama bot ini adalah mempermudah pemilihan skincare agar lebih cepat, tepat, dan sesuai kebutuhan. Proyek ini juga menjadi implementasi praktis dalam mengembangkan chatbot berbasis Discord API untuk edukasi dan panduan kecantikan. 
 
+Anda bisa mengakses bot dengan join ke [server discord ini](https://discord.gg/BEGFvVwn). 
+
 ---
 
 ## 2. Cara Setup & Run
