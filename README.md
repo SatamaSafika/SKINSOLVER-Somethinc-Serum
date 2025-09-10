@@ -6,10 +6,15 @@ SKINSOLVER adalah bot Discord berbasis Python yang dirancang untuk membantu peng
 
 ---
 
-## 2. Cara Setup  
+## 2. Cara Setup & Run
 
 Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:  
 
+* **Buat Discord Bot & Dapatkan Token**
+   - Buka [Discord Developer Portal](https://discord.com/developers/applications)
+   - Klik **New Application** → beri nama → buat **Bot**
+   - Salin **Bot Token** dari tab *Bot*. Token ini yang dipakai di kode Python Anda (DISCORD_TOKEN=...)
+     
 * **Clone repository**  
    ```bash
    git clone https://github.com/username/skinsolver-bot.git
@@ -28,8 +33,8 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
     pip install -r requirements.txt
     ```
 
-* **Tambahkan Discord Token**
-    DISCORD_TOKEN=your_discord_token_here
+* **Tambahkan Discord Token**  
+  Salin `.env.template` menjadi `.env` lalu isi `DISCORD_TOKEN=your_discord_token_here` (ganti dengan token Discord Anda)
 
 * **Jalankan bot**
   ```bash
@@ -37,11 +42,11 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
    ```
 ---
 
-  ## 3. Demonstartion
+  ## 3. Demo
   <img width="1740" height="1336" alt="Image" src="https://github.com/user-attachments/assets/1e592ad5-2966-4f16-9551-d389adb9a6c2" />
   Klik di sini untuk lihat video demo
   <a href="https://github.com/user-attachments/assets/46f73b63-1992-412e-9943-ef52f18f212d">
-    SKINSOLVER-Somethinc-Serum Demo
+    SKINSOLVER-Somethinc-Serum
   </a>
    
 ---
@@ -54,7 +59,7 @@ Selain itu, bot ini juga menjadi sarana pembelajaran kami dalam mengembangkan ch
 
 ---
 
-## 5. Source
+## 5. Sumber
 
 Sumber utama yang digunakan dalam bot ini adalah **decision tree rekomendasi serum resmi dari Skintific**.  
 Decision tree tersebut dipilih karena:  
