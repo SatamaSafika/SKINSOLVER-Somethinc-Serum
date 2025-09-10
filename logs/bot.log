@@ -956,3 +956,6 @@ aiohttp.client_exceptions.ClientConnectorDNSError: Cannot connect to host gatewa
 2025-09-10 12:23:21,862 WARNING PyNaCl is not installed, voice will NOT be supported
 2025-09-10 12:23:21,867 INFO logging in using static token
 2025-09-10 12:23:23,725 INFO Shard ID None has connected to Gateway (Session ID: 40310823b033d823e16c1586e13ef5f0).
+2025-09-10 12:26:05,640 WARNING PyNaCl is not installed, voice will NOT be supported
+2025-09-10 12:26:05,640 INFO logging in using static token
+2025-09-10 12:26:07,323 INFO Shard ID None has connected to Gateway (Session ID: e48fefc8f64c92e5bf15b127f52c770b).
