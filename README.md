@@ -29,7 +29,7 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
     ```
 
 * **Tambahkan Discord Token**
-    DISCORD_TOKEN=your_discord_token_here
+    Salin .env.template menjadi .env lalu isi DISCORD_TOKEN=your_discord_token_here (ganti dengan token Discord Anda)
 
 * **Jalankan bot**
   ```bash
