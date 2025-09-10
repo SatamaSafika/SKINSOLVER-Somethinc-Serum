@@ -13,7 +13,7 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
 * **Buat Discord Bot & Dapatkan Token**
    - Buka [Discord Developer Portal](https://discord.com/developers/applications)
    - Klik **New Application** → beri nama → buat **Bot**
-   - Salin **Bot Token** dari tab *Bot*
+   - Salin **Bot Token** dari tab *Bot*. Token ini yang dipakai di kode Python Anda (DISCORD_TOKEN=...)
      
 * **Clone repository**  
    ```bash
