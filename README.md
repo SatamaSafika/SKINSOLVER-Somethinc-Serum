@@ -41,7 +41,7 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
   <img width="1740" height="1336" alt="Image" src="https://github.com/user-attachments/assets/1e592ad5-2966-4f16-9551-d389adb9a6c2" />
   Klik di sini untuk lihat video demo
   <a href="https://github.com/user-attachments/assets/46f73b63-1992-412e-9943-ef52f18f212d">
-    SKINSOLVER-Somethinc-Serum Demo
+    SKINSOLVER-Somethinc-Serum
   </a>
    
 ---
