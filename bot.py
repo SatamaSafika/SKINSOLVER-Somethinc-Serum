@@ -96,7 +96,7 @@ type_patterns = {
 def greet_user():
     return (
         "Hai cantik, selamat datang di **SKINSOLVER** 💎\n"
-        "Aku hadir khusus buat nemenin kamu nemuin solusi pas untuk kulitmu — "
+        "Aku ada di sini buat bantu kamu temukan solusi terbaik untuk kulitmu— "
         "mulai dari mencerahkan, mengatasi jerawat, sampai anti-aging ✨.\n\n"
         "Coba ceritakan dulu yuk... goal utama kulitmu apa? 🌸"
     )
@@ -110,9 +110,14 @@ responses = {
         "focus_default": "Oke, jadi kamu ingin kulit lebih cerah 🌸. Supaya lebih spesifik, apakah lebih ke **kusam, bekas jerawat, atau hiperpigmentasi**?",
         "kusam": {
             "ask_type": "Kulit kusam ya ✨. Biar aku bisa kasih rekomendasi tepat, tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
-            "sensitive": ["Untuk kulit sensitif yang kusam, coba *5% Niacinamide + Moisture Sabi Beet Serum* 🌿"],
+            "sensitive": [
+                    "Untuk kulit sensitif yang kusam, kamu bisa coba:\n"
+                    "🌿 5% Niacinamide + Moisture Sabi Beet Serum → cocok untuk kulit kering.\n"
+                    "💧 Revive Potion 3% Arbutin + Bakuchiol → cocok untuk kulit sedikit berminyak.\n"
+                    "Pilih sesuai kondisi kulitmu ya!"
+                ],
             "normal": ["Kulit normal kusam cocok dengan *10% Niacinamide + Moisture Sabi Beet Serum* 🌟"],
-            "oily": ["Kalau kusam + berminyak, coba *Revive Potion 3% Arbutin Bakuchiol* 💧"],
+            "oily": ["Kalau kusam + berminyak, coba *Revive Potion 3% Arbutin + Bakuchiol* 💧"],
             "type_default": "Aku paham, tipe kulitmu unik ya 💕. Tapi kalau digeneralisasi, apakah lebih dekat ke **sensitive, normal, atau oily**?"
         },
         "bekas": [
@@ -121,25 +126,25 @@ responses = {
         ],
         "hyper": {
             "ask_type": "Mengatasi hiperpigmentasi memang butuh perhatian ekstra 🌸. Tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
-            "sensitive": ["Kulit sensitif dengan flek cocok dengan serum anti-spot ringan 🌿"],
-            "normal": ["Untuk kulit normal, retinol atau AHA bisa bantu kurangi flek 🌟"],
-            "oily": ["Kalau kulitmu oily + flek, coba azelaic acid atau niacinamide 💧"],
+            "sensitive": ["Kulit sensitif dengan flek bisa lebih cocok pakai C-Riously 24K Gold Essence 💛 Formula lembutnya bantu samarin flek tanpa bikin kulit iritasi, plus kasih efek cerah sehat dari 24K Gold."],
+            "normal": ["Untuk kulit normal, bisa coba Lemonade Waterless Vitamin C + Ferulic + NAG 🍋✨ Kandungan vitamin C-nya bantu samarin flek, cerahkan kulit, dan jaga tekstur tetap sehat."],
+            "oily": ["Kalau kulitmu oily + flek, pas banget cobain Lemonade Waterless Vitamin C + Ferulic + NAG 🍋✨ Bantu samarin noda hitam, cerahin kulit, sekaligus jaga produksi minyak tetap seimbang."],
             "type_default": "Oke cantik, biar lebih tepat aku perlu tahu dulu... kulitmu lebih condong ke **sensitive, normal, atau oily**?"
         },
     },
     "acne": {
         "ask_focus": "Oke, goal kamu mengatasi jerawat 🧴. Mau fokus ke **jerawat aktif, pencegahan, atau jerawat yang terlihat jelas**?",
         "focus_default": "Aku mengerti, tapi biar lebih spesifik 🌸. Apakah mau fokus ke **jerawat aktif, pencegahan, atau jerawat yang terlihat**?",
-        "jerawat": ["Untuk jerawat aktif, coba *salicylic acid* atau *benzoyl peroxide* 🧴"],
-        "cegah": ["Untuk pencegahan jerawat, double cleansing + sunscreen adalah kunci 🌞"],
-        "visible": ["Kalau jerawat yang terlihat, spot treatment bisa jadi sahabatmu 👀"],
+        "jerawat": ["Kalau jerawatnya tipe komedoan, cocok banget pakai 2% BHA Salicylic Acid Liquid Perfector 🧴 yang bantu bersihin pori dan kontrol minyak. Tapi kalau jerawatnya lebih merah/meradang, coba Bakuchiol Skinpair Oil Serum 🌿 karena lembut, calming, dan bantu redakan kemerahan."],
+        "cegah": ["Untuk pencegahan jerawat, bisa pakai 60% Vita Propolis + Bee Venom Glow Serum 🐝✨ yang bantu kuatkan skin barrier sekaligus bikin kulit lebih sehat dan glowing."],
+        "visible": ["Kalau jerawatnya kelihatan, untuk perawatan harian bisa pakai Hylapore Away Solution 👀✨ biar lebih cepat kalem. Kalau mau treatment mingguan 1–3x, bisa coba AHA BHA Peeling Solution 🧪 buat eksfoliasi dan samarin noda."],
     },
     "antiaging": {
         "ask_type": "Anti-aging itu investasi jangka panjang untuk kulitmu 💎. Tipe kulitmu lebih ke **sensitive, normal, atau oily**?",
-        "sensitive": ["Untuk kulit sensitif, mulai dengan retinol low concentration atau bakuchiol 🌿"],
-        "normal": ["Kulit normal bisa gunakan retinol + moisturizer bernutrisi 💧"],
-        "oily": ["Kalau kulitmu oily, pilih formula ringan dengan retinol/peptide ✨"],
-        "type_default": "Oke sayang, aku ingin lebih pasti dulu. Tipe kulitmu lebih dekat ke **sensitive, normal, atau oily**?"
+        "sensitive": ["Untuk kulit sensitif kamu bisa pakai Granactive Snow Retinoid 2% ❄️✨. Formula lembutnya aman buat pemula, bantu haluskan garis halus tanpa bikin kulit gampang iritasi."],
+        "normal": ["Kalau kulitmu normal, bisa mulai dengan Level 1 Encapsulated Retinoid 💧 yang lembut untuk pemula. Kalau sudah terbiasa dan mau dosis lebih tinggi, cobain 1% Pure Retinol + Squalane ✨ buat hasil anti-aging yang lebih maksimal."],
+        "oily": ["Kalau kulitmu oily, bisa mulai dengan Level 1 Encapsulated Retinoid ✨ yang ringan & aman buat pemula. Kalau sudah terbiasa dan mau dosis lebih tinggi, cobain 1% Pure Retinol + Squalane 💧 buat hasil anti-aging lebih maksimal."],
+        "type_default": "Okey, aku ingin lebih pasti dulu ya. Tipe kulitmu lebih dekat ke **sensitive, normal, atau oily**?"
     },
 }
 
