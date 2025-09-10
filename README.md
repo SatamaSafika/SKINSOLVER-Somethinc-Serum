@@ -14,7 +14,6 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
    - Buka [Discord Developer Portal](https://discord.com/developers/applications)
    - Klik **New Application** → beri nama → buat **Bot**
    - Salin **Bot Token** dari tab *Bot*
-   - Invite bot ke server Anda (pakai *OAuth2 URL Generator* → beri izin "Bot" → copy link → buka di browser → pilih server)
      
 * **Clone repository**  
    ```bash
