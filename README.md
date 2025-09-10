@@ -1,7 +1,5 @@
 # SKINSOLVER-Somethinc-Serum
 
-# SKINSOLVER Serum Recommendation Bot  
-
 ## 1. Pengenalan Singkat  
 
 SKINSOLVER adalah bot Discord berbasis Python yang dirancang untuk membantu pengguna menemukan serum Skintific yang sesuai dengan tipe kulit dan fokus utama perawatan.  Bot ini dapat memberikan rekomendasi personal berdasarkan kebutuhan seperti kulit kusam, jerawat, hingga anti-aging.  Dengan sistem interaktif, pengguna cukup menjawab beberapa pertanyaan, lalu bot akan menyarankan produk yang relevan.  Tujuan utama bot ini adalah mempermudah pemilihan skincare agar lebih cepat, tepat, dan sesuai kebutuhan.  Proyek ini juga menjadi implementasi praktis dalam mengembangkan chatbot berbasis Discord API untuk edukasi dan panduan kecantikan.  
@@ -52,6 +50,22 @@ Selain itu, bot ini juga menjadi sarana pembelajaran kami dalam mengembangkan ch
 ---
 
 ## 5. Source
+
+Sumber utama yang digunakan dalam bot ini adalah **decision tree rekomendasi serum resmi dari Skintific**.  
+Decision tree tersebut dipilih karena:  
+
+- Memberikan panduan terstruktur dalam pemilihan produk sesuai **tipe kulit** dan **masalah utama kulit**.  
+- Memastikan rekomendasi bot tetap **konsisten dengan standar brand resmi**, bukan opini pribadi.  
+- Membantu pengguna dalam **proses pengambilan keputusan yang cepat dan mudah**, tanpa harus membaca deskripsi produk satu per satu.  
+- Menjadi dasar logika sederhana yang dapat diimplementasikan ke dalam bot Discord dengan format percabangan (if-else atau mapping).  
+
+Berikut visualisasi decision tree dari Skintific yang menjadi rujukan:  
+
+![Image](https://github.com/user-attachments/assets/65fbfdbe-2fdf-4da1-b60d-604efb4a76a8)  
+![Image](https://github.com/user-attachments/assets/95ff9492-0df4-4835-879c-cd5526a4312e)  
+![Image](https://github.com/user-attachments/assets/ea276b86-867a-4d60-b6c6-185c3a4af28d)  
+
+Selain itu, tutorial dari video youtube [How to Build a Discord Bot With Python - Full Tutorial 2025+](https://youtu.be/YD_N6Ffoojw?si=UddLO1FfyahCuh8v) digunakan sebagai acuan pengintegrasi bot dalam discord.
 
 ---
 
