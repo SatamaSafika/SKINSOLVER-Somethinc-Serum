@@ -6,7 +6,7 @@ SKINSOLVER adalah bot Discord berbasis Python yang dirancang untuk membantu peng
 
 ---
 
-## 2. Cara Setup  
+## 2. Cara Setup & Run
 
 Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:  
 
@@ -37,7 +37,7 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
    ```
 ---
 
-  ## 3. Demonstartion
+  ## 3. Demo
   <img width="1740" height="1336" alt="Image" src="https://github.com/user-attachments/assets/1e592ad5-2966-4f16-9551-d389adb9a6c2" />
   Klik di sini untuk lihat video demo
   <a href="https://github.com/user-attachments/assets/46f73b63-1992-412e-9943-ef52f18f212d">
@@ -54,7 +54,7 @@ Selain itu, bot ini juga menjadi sarana pembelajaran kami dalam mengembangkan ch
 
 ---
 
-## 5. Source
+## 5. Sumber
 
 Sumber utama yang digunakan dalam bot ini adalah **decision tree rekomendasi serum resmi dari Skintific**.  
 Decision tree tersebut dipilih karena:  
