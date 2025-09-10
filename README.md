@@ -38,6 +38,9 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
 ---
 
   ## 3. Demonstartion
+  <img width="1740" height="1336" alt="Image" src="https://github.com/user-attachments/assets/1e592ad5-2966-4f16-9551-d389adb9a6c2" />
+
+  
 
 ---
 
