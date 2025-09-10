@@ -61,7 +61,7 @@ Decision tree tersebut dipilih karena:
 
 Berikut visualisasi decision tree dari Skintific yang menjadi rujukan:  
 
-![Image](https://github.com/user-attachments/assets/65fbfdbe-2fdf-4da1-b60d-604efb4a76a8)  
+![Image](https://github.com/user-attachments/assets/6b78cd60-136b-410c-b00d-baa3da1179bf)  
 ![Image](https://github.com/user-attachments/assets/95ff9492-0df4-4835-879c-cd5526a4312e)  
 ![Image](https://github.com/user-attachments/assets/ea276b86-867a-4d60-b6c6-185c3a4af28d)  
 
