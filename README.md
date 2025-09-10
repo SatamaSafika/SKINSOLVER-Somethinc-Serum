@@ -39,9 +39,10 @@ Ikuti langkah-langkah berikut untuk menjalankan bot di perangkat Anda:
 
   ## 3. Demonstartion
   <img width="1740" height="1336" alt="Image" src="https://github.com/user-attachments/assets/1e592ad5-2966-4f16-9551-d389adb9a6c2" />
-  <p align="center">
-     <img src="https://github.com/user-attachments/assets/your-gif-link.gif" width="600" alt="Demo Video"/>
-   </p>
+  Klik di sini untuk lihat video demo
+  <a href="https://github.com/user-attachments/assets/46f73b63-1992-412e-9943-ef52f18f212d">
+    SKINSOLVER-Somethinc-Serum Demo
+  </a>
    
 ---
 
